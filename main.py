@@ -53,28 +53,26 @@ non_individual_keywords = [
     "publishing","publisher","agency","MEDICINE","DENTISTRY","ACADEMIC","COMPANY","BOARD","FOUNDATION","CLEVELAND","CARDIOFRONT","univ",
 ]
 
-# Enhanced out-of-scope detection logic with partial match and special char check
+# Out-of-scope detection logic based on strict keyword matching
 def classify_name(name):
     try:
         if not isinstance(name, str):
             return "Needs Review"
         name = name.strip().lower()
-        special_chars = re.compile(r'[-./\\#@$%^&*+=\[\]{}|;:,<>?]')
-        # Check for special characters
-        if special_chars.search(name):
-            return "Needs Review"
-        # Check for partial matches or extra letters
+        # Check for keyword match (no ignore for . or - when keyword is present)
         for keyword in non_individual_keywords:
             pattern = rf'\b{re.escape(keyword)}\b(?=\s|$)'
-            match = re.search(pattern, name, re.IGNORECASE)
-            if match:
-                # Check if partial match or extra letters (within 3-4 chars)
-                start, end = match.span()
-                word = name[start:end]
-                if len(name) > len(word) + 4 or (len(name) > len(word) and not re.match(rf'^{re.escape(word)}\w{{0,4}}$', name)):
-                    return "Needs Review"
+            if re.search(pattern, name, re.IGNORECASE):
                 return "Out of Scope"
-        return "In Scope"  # Default to In Scope if no keywords match
+        # Check for special characters (except . and -)
+        special_chars = re.compile(r'[^a-zA-Z0-9.\-]')
+        if special_chars.search(name):
+            return "Needs Review"
+        # If only . and - are present (e.g., Dr., Mr., Smith-Jones) and no keyword, mark as In Scope
+        if re.search(r'[.\-]', name) and not any(re.search(rf'\b{re.escape(keyword)}\b(?=\s|$)', name, re.IGNORECASE) for keyword in non_individual_keywords):
+            return "In Scope"
+        # Default to In Scope if no keyword or special chars (except . and -)
+        return "In Scope"
     except Exception as e:
         st.error(f"Classification error for '{name}': {e}")
         return "Needs Review"
@@ -82,7 +80,7 @@ def classify_name(name):
 # UI setup and main app logic
 st.title("🌍 Global Customer Categorizer")
 st.markdown("""
-This tool categorizes customers as **Out of Scope (Non-Individuals)** or **In Scope (Individuals)** based on global keywords. Upload your Excel/CSV file to start.
+This tool categorizes customers as **Out of Scope**, **In Scope**, or **Needs Review** based on strict keyword matching. Upload your Excel/CSV file to start.
 For files >200MB, process locally or split into parts.
 """)
 
@@ -99,11 +97,11 @@ if uploaded_file is not None:
         # Process based on file type
         if uploaded_file.name.lower().endswith('.csv'):
             for chunk in pd.read_csv(uploaded_file, chunksize=chunksize):
-                chunk["Scope Status"] = chunk.iloc[:, 0].apply(classify_name)  # Use first column directly
+                chunk["Scope Status"] = chunk.iloc[:, 0].apply(classify_name)
                 chunks.append(chunk)
         else:  # Excel file
             df = pd.read_excel(uploaded_file)
-            df["Scope Status"] = df.iloc[:, 0].apply(classify_name)  # Use first column directly
+            df["Scope Status"] = df.iloc[:, 0].apply(classify_name)
             chunks.append(df)
 
         df = pd.concat(chunks, ignore_index=True) if chunks else df
