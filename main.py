@@ -99,11 +99,11 @@ if uploaded_file is not None:
         # Process based on file type
         if uploaded_file.name.lower().endswith('.csv'):
             for chunk in pd.read_csv(uploaded_file, chunksize=chunksize):
-                chunk["Scope Status"] = chunk.apply(lambda row: classify_name(row[chunk.columns[0]] if "name" in chunk.columns else row[chunk.columns[0]]), axis=1)
+                chunk["Scope Status"] = chunk.iloc[:, 0].apply(classify_name)  # Use first column directly
                 chunks.append(chunk)
         else:  # Excel file
-            df = pd.read_excel(uploaded_file)  # Load directly for small files
-            df["Scope Status"] = df.apply(lambda row: classify_name(row[row.columns[0]] if "name" in row.columns else row[row.columns[0]]), axis=1)
+            df = pd.read_excel(uploaded_file)
+            df["Scope Status"] = df.iloc[:, 0].apply(classify_name)  # Use first column directly
             chunks.append(df)
 
         df = pd.concat(chunks, ignore_index=True) if chunks else df
