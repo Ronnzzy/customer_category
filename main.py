@@ -10,23 +10,43 @@ st.set_page_config(page_title="Customer Categorizer", layout="wide")
 # Expanded non-individual keywords for global coverage
 non_individual_keywords = [
     # Legal/Corporate Structures (Global)
+    "inc", "inc.", "llc", "l.l.c.", "ltd", "ltd.", "limited", "corp", "corporation", "co", "co.", "pte", "pvt", "llp","home","accounts","payable","price","IPSB",
+    "gmbh", "ag", "nv", "bv", "kk", "oy", "ab", "plc", "s.a", "s.a.s", "sa", "sarl", "sl", "aps", "as", "kft", "pt", "sdn", "bhd","dite","cabinet","gabinet","univ","university",
+    "srl", "pty ltd", "se", "a/s", "sp zoo", "eurl","LIBRARY","IFSI ","sante","BTP","nord","travail","hopital","grand","site","COMMUNITY","urban","AGGLOPOLYS",
+    # Pharmacy/Healthcare (Global)
+    "pharmacy", "drugstore", "healthcare", "medical", "clinic", "hospital", "apothecary", "dispensary","NIGUARDA","TECNICAS","ICO","THERAPEUTICS","OPTIMAL","coll","med","dent",
+    # Academic/Institutional
+    "university", "uni", "institute", "inst", "college", "academy", "school", "faculty", "dept", "department","loire","dente","tech","SRL","S.R.L","personal","homemed","sro"
+    # Science/R&D
+    "centre", "center", "r&d", "science", "biotech", "medtech", "ai","fondu","funda","Cardio","college","ctr","adult","lake","comm","education","edu","resource","care","health",
+    # Government/NGO
+    "govt", "government", "ngo", "ministry", "agency", "authority","OSPEDALE","valley","limited","ltd","ltd.","unlimited","ACHYUT","store", "shop", "bookshop", "library", "distribution", "distributors", "outlet", "media", "publications", "books", "press",
+    # Professional Services
+    "solutions", "consulting", "partners", "services", "group", "holdings", "enterprises","SAR","S.A.R","DOTT.","sro","dos","santos","labo","laboratory","products","forest",
+    # Retail/Media
+    "store", "shop", "outlet", "market", "retail", "distributors","hlth","mental","ment","mntl","agency","environment","borad","environment","investigation","agency",""
+    # Others
+    "foundation", "trust", "association", "organization", "network","CNRS","C.N.R.S","state","SCTD","europe","medcor","medi","metro","SOCIO","METROPOLITANO","County","council","foundation", "fondation", "trust", "union", "syndicate", "board", "chamber", "association", "club", "society",
+    "network", "cooperative", "federation", "council", "committee", "coalition", "initiative",
+    # Professional / Financial Services
+    "solutions", "consulting", "consultants", "advisory", "advisors", "partners", "partnership", "associates",
+    "services", "ventures", "enterprises", "management", "finance", "capital", "holdings", "intl", "international",
+    "global", "industries", "logistics", "trading", "procurement", "group",
+    #govt
+    "govt", "government", "ngo", "n.g.o", "nonprofit", "non-profit", "ministry", "embassy", "consulate",
+    "office", "admin", "administration", "secretariat", "authority", "commission", "agency", "bureau","solutions", "consulting", "consultants", "advisory", "advisors", "partners", "partnership", "associates",
+    "services", "ventures", "enterprises", "management", "finance", "capital", "holdings", "intl", "international",
+    "global", "industries", "logistics", "trading", "procurement", "group","team", "division", "branch", "unit", "project", "consortium", "alliance", "hub", "taskforce", "incubator", "accelerator",
+    # Science / R&D
+    "centre", "center", "r&d", "science", "sciences", "technical", "technological", "technology", "innovation",
+    "biotech", "medtech", "ai", "ml", "cybernetics",
+    # Legal/Corporate Structures
     "inc", "inc.", "llc", "l.l.c.", "ltd", "ltd.", "limited", "corp", "corporation", "co", "co.", "pte", "pvt", "llp",
     "gmbh", "ag", "nv", "bv", "kk", "oy", "ab", "plc", "s.a", "s.a.s", "sa", "sarl", "sl", "aps", "as", "kft", "pt", "sdn", "bhd",
-    "srl", "pty ltd", "se", "a/s", "sp zoo", "eurl",
-    # Pharmacy/Healthcare (Global)
-    "pharmacy", "drugstore", "healthcare", "medical", "clinic", "hospital", "apothecary", "dispensary",
-    # Academic/Institutional
-    "university", "uni", "institute", "inst", "college", "academy", "school", "faculty", "dept", "department",
-    # Science/R&D
-    "centre", "center", "r&d", "science", "biotech", "medtech", "ai",
-    # Government/NGO
-    "govt", "government", "ngo", "ministry", "agency", "authority",
-    # Professional Services
-    "solutions", "consulting", "partners", "services", "group", "holdings", "enterprises",
-    # Retail/Media
-    "store", "shop", "outlet", "market", "retail", "distributors",
-    # Others
-    "foundation", "trust", "association", "organization", "network"
+
+    # Academic / Institutional
+    "university", "uni", "institute", "inst", "college", "academy", "school", "faculty", "dept", "department", "cnrs",
+    "research", "laboratory", "lab", "education", "educational", "engineering", "polytechnic", "polytech",
 ]
 
 # Enhanced out-of-scope detection logic
