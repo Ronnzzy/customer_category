@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from io import BytesIO
 import re
+import time
 
 # Set page configuration as the first Streamlit command
 st.set_page_config(page_title="Customer Categorizer", layout="wide")
@@ -27,7 +28,7 @@ non_individual_keywords = [
     # Government/NGO
     "govt", "government", "ngo", "n.g.o", "nonprofit", "non-profit", "ministry", "embassy", "consulate", "office", "admin",
     "administration", "secretariat", "authority", "commission", "agency", "bureau", "OSPEDALE", "valley", "limited", "ltd",
-    "ltd.", "unlimited","PSYCHOLOGICAL","EDUCATORS","SCIENCE","PUBLISHING","CARE","CRITICAL","NURSES","WILDLIFE",
+    "ltd.", "unlimited",
     # Professional Services
     "solutions", "consulting", "consultants", "advisory", "advisors", "partners", "partnership", "associates", "services",
     "ventures", "enterprises", "management", "finance", "capital", "holdings", "intl", "international", "global", "industries",
@@ -48,7 +49,8 @@ non_individual_keywords = [
     "healthcare", "medical", "dental", "pharmaceutical", "therapeutics", "optimal", "clinic", "hospitality", "services",
     "consulting", "partners", "group", "holdings", "international", "global", "industries", "logistics", "trading",
     # Add your missing keywords here as you find them
-    # Example: "newkeyword1", "newkeyword2"
+    # Example: 
+    "publishing","publisher","agency","MEDICINE","DENTISTRY","ACADEMIC","COMPANY","BOARD","FOUNDATION","CLEVELAND","CARDIOFRONT","univ",
 ]
 
 # Enhanced out-of-scope detection logic with partial match and special char check
@@ -81,20 +83,32 @@ def classify_name(name):
 st.title("🌍 Global Customer Categorizer")
 st.markdown("""
 This tool categorizes customers as **Out of Scope (Non-Individuals)** or **In Scope (Individuals)** based on global keywords. Upload your Excel/CSV file to start.
+For files >200MB, process locally or split into parts.
 """)
 
-uploaded_file = st.file_uploader("📤 Upload Excel or CSV file", type=["csv", "xlsx"], help="Upload a file with a 'name' column or similar.")
+uploaded_file = st.file_uploader("📤 Upload Excel or CSV file", type=["csv", "xlsx"], help="For files >200MB, process locally or split into parts.")
 
 if uploaded_file is not None:
     try:
-        # Process in chunks for large datasets
-        chunksize = 1000
+        # Adjustable chunk size for large datasets (only for CSV)
+        chunksize = st.slider("Select chunk size (rows, for CSV only)", 500, 5000, 1000, step=500) if uploaded_file.name.lower().endswith('.csv') else None
+        st.write(f"Processing with chunk size: {chunksize} rows" if chunksize else "Processing Excel file directly (no chunking)")
         chunks = []
-        for chunk in pd.read_csv(uploaded_file, chunksize=chunksize) if uploaded_file.name.lower().endswith('.csv') else pd.read_excel(uploaded_file, chunksize=chunksize):
-            chunk["Scope Status"] = chunk.apply(lambda row: classify_name(row[chunk.columns[0]] if "name" in chunk.columns else row[chunk.columns[0]]), axis=1)
-            chunks.append(chunk)
+        start_time = time.time()
 
-        df = pd.concat(chunks, ignore_index=True)
+        # Process based on file type
+        if uploaded_file.name.lower().endswith('.csv'):
+            for chunk in pd.read_csv(uploaded_file, chunksize=chunksize):
+                chunk["Scope Status"] = chunk.apply(lambda row: classify_name(row[chunk.columns[0]] if "name" in chunk.columns else row[chunk.columns[0]]), axis=1)
+                chunks.append(chunk)
+        else:  # Excel file
+            df = pd.read_excel(uploaded_file)  # Load directly for small files
+            df["Scope Status"] = df.apply(lambda row: classify_name(row[row.columns[0]] if "name" in row.columns else row[row.columns[0]]), axis=1)
+            chunks.append(df)
+
+        df = pd.concat(chunks, ignore_index=True) if chunks else df
+        end_time = time.time()
+        st.write(f"Processing time: {end_time - start_time:.2f} seconds")
 
         # Auto-detect name column or let user select
         name_col = next((col for col in df.columns if "name" in col.lower() or "customer" in col.lower()), None)
@@ -103,9 +117,15 @@ if uploaded_file is not None:
 
         st.info(f"🔧 Using column: **{name_col}** for categorization")
 
-        # Apply classification (already done in chunks)
+        # Apply classification
         df["Scope Status"] = df[name_col].apply(classify_name)
         st.success("✅ Categorization completed successfully!")
+
+        # Save to processed folder (local)
+        if os.path.exists("processed"):
+            output_path = os.path.join("processed", f"categorized_customers_{pd.Timestamp.now().strftime('%Y%m%d_%H%M')}.xlsx")
+            df.to_excel(output_path, index=False)
+            st.write(f"Results saved to: {output_path}")
 
         # Display results
         st.subheader("📊 Categorization Results")
