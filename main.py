@@ -24,7 +24,7 @@ non_individual_keywords = [
     # Professional Services
     "solutions", "consulting", "partners", "services", "group", "holdings", "enterprises","SAR","S.A.R","DOTT.","sro","dos","santos","labo","laboratory","products","forest",
     # Retail/Media
-    "store", "shop", "outlet", "market", "retail", "distributors","hlth","mental","ment","mntl","agency","environment","borad","environment","investigation","agency",""
+    "store", "shop", "outlet", "market", "retail", "distributors","hlth","mental","ment","mntl","agency","environment","borad","environment","investigation","agency","PHYSIO"
     # Others
     "foundation", "trust", "association", "organization", "network","CNRS","C.N.R.S","state","SCTD","europe","medcor","medi","metro","SOCIO","METROPOLITANO","County","council","foundation", "fondation", "trust", "union", "syndicate", "board", "chamber", "association", "club", "society",
     "network", "cooperative", "federation", "council", "committee", "coalition", "initiative",
