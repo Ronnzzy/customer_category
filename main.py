@@ -7,7 +7,7 @@ import re
 # Set page configuration as the first Streamlit command
 st.set_page_config(page_title="Customer Categorizer", layout="wide")
 
-# Non-individual keywords (integrated with potential 29,450 list patterns)
+# Non-individual keywords (base list + space for your additions)
 non_individual_keywords = [
     # Legal/Corporate Structures (Global)
     "inc", "inc.", "llc", "l.l.c.", "ltd", "ltd.", "limited", "corp", "corporation", "co", "co.", "pte", "pvt", "llp", "home",
@@ -27,7 +27,7 @@ non_individual_keywords = [
     # Government/NGO
     "govt", "government", "ngo", "n.g.o", "nonprofit", "non-profit", "ministry", "embassy", "consulate", "office", "admin",
     "administration", "secretariat", "authority", "commission", "agency", "bureau", "OSPEDALE", "valley", "limited", "ltd",
-    "ltd.", "unlimited",
+    "ltd.", "unlimited","PSYCHOLOGICAL","EDUCATORS","SCIENCE","PUBLISHING","CARE","CRITICAL","NURSES","WILDLIFE",
     # Professional Services
     "solutions", "consulting", "consultants", "advisory", "advisors", "partners", "partnership", "associates", "services",
     "ventures", "enterprises", "management", "finance", "capital", "holdings", "intl", "international", "global", "industries",
@@ -42,23 +42,35 @@ non_individual_keywords = [
     "board", "chamber", "association", "club", "society", "network", "cooperative", "federation", "council", "committee",
     "coalition", "initiative", "team", "division", "branch", "unit", "project", "consortium", "alliance", "hub", "taskforce",
     "incubator", "accelerator",
-    # Potential Keywords from 29,450 List (Assumed from global patterns)
+    # Potential Keywords from 29,450 List (Assumed)
     "company", "organization", "institution", "corporativo", "gesellschaft", "assurance", "bank", "insurance", "enterprise",
     "commerce", "trade", "supply", "distribution", "networking", "technology", "innovation", "research", "development",
     "healthcare", "medical", "dental", "pharmaceutical", "therapeutics", "optimal", "clinic", "hospitality", "services",
-    "consulting", "partners", "group", "holdings", "international", "global", "industries", "logistics", "trading","FOUNDATION","publishing","cleveland","press","inc","inc.","science","america","advancement","acpa","jounrnal","publishers","department","injury","civil","society",
+    "consulting", "partners", "group", "holdings", "international", "global", "industries", "logistics", "trading",
+    # Add your missing keywords here as you find them
+    # Example: "newkeyword1", "newkeyword2"
 ]
 
-# Enhanced out-of-scope detection logic
+# Enhanced out-of-scope detection logic with partial match and special char check
 def classify_name(name):
     try:
         if not isinstance(name, str):
             return "Needs Review"
         name = name.strip().lower()
-        # Check for non-individual keywords with improved regex
+        special_chars = re.compile(r'[-./\\#@$%^&*+=\[\]{}|;:,<>?]')
+        # Check for special characters
+        if special_chars.search(name):
+            return "Needs Review"
+        # Check for partial matches or extra letters
         for keyword in non_individual_keywords:
             pattern = rf'\b{re.escape(keyword)}\b(?=\s|$)'
-            if re.search(pattern, name, re.IGNORECASE):
+            match = re.search(pattern, name, re.IGNORECASE)
+            if match:
+                # Check if partial match or extra letters (within 3-4 chars)
+                start, end = match.span()
+                word = name[start:end]
+                if len(name) > len(word) + 4 or (len(name) > len(word) and not re.match(rf'^{re.escape(word)}\w{{0,4}}$', name)):
+                    return "Needs Review"
                 return "Out of Scope"
         return "In Scope"  # Default to In Scope if no keywords match
     except Exception as e:
