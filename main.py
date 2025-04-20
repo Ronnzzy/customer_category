@@ -28,7 +28,28 @@ if uploaded_file:
         "admin", "metro", "sante", "hopital", "dispensary", "home", "cabinet", "gabinet", "therapeutics", "dott.", "sro",
         "forest", "products", "board", "publishing", "publisher", "school", "denta", "asociacion", "ies", "torre", "vicens",
         "environment", "unlimited", "syndicate", "venture", "accelerator", "incubator", "cardio", "cardiofront",
-        "cleveland", "physio"
+        "cleveland", "physio","inc", "inc.", "llc", "l.l.c.", "ltd", "ltd.", "limited", "corp", "corporation", "co", "co.", "pte", "pvt", "llp", "home",
+        "accounts", "payable", "price", "IPSB", "gmbh", "ag", "nv", "bv", "kk", "oy", "ab", "plc", "s.a", "s.a.s", "sa", "sarl", "sl",
+        "aps", "as", "kft", "pt", "sdn", "bhd", "dite", "cabinet", "gabinet", "univ", "university", "srl", "pty ltd", "se", "a/s",
+        "sp zoo", "eurl", "LIBRARY", "IFSI ", "sante", "BTP", "nord", "travail", "hopital", "grand", "site", "COMMUNITY", "urban",
+        "AGGLOPOLYS", "AZIENDA SOCIO SANITARIA TERRITORIALE GRANDE OSPEDALE METROPOLITANO NIGUARDA", "ACHYUT","pharmacy", "drugstore", "healthcare", "medical", "clinic", "hospital", "apothecary", "dispensary", "NIGUARDA", "TECNICAS",
+        "ICO", "THERAPEUTICS", "OPTIMAL", "coll", "med", "dent", "denta", "PHARMACEUTICALS", "PHARMACEUTICAL", "pharma",
+        "university", "uni", "institute", "inst", "college", "academy", "school", "faculty", "dept", "department", "loire", "dente",
+        "tech", "SRL", "S.R.L", "personal", "homemed", "sro","centre", "center", "r&d", "science", "biotech", "medtech", "ai", "fondu", "funda", "Cardio", "college", "ctr", "adult",
+        "lake", "comm", "education", "edu", "resource", "care", "health", "ASOCIACION", "CIF", "IES TORRE VICEN,"govt", "government", "ngo", "n.g.o", "nonprofit", "non-profit", "ministry", "embassy", "consulate", "office", "admin",
+        "administration", "secretariat", "authority", "commission", "agency", "bureau", "OSPEDALE", "valley", "limited", "ltd",
+        "ltd.", "unlimited","solutions", "consulting", "consultants", "advisory", "advisors", "partners", "partnership", "associates", "services",
+        "ventures", "enterprises", "management", "finance", "capital", "holdings", "intl", "international", "global", "industries",
+        "logistics", "trading", "procurement", "group", "SAR", "S.A.R", "DOTT.", "sro", "dos", "santos", "labo", "laboratory",
+        "products", "forest","store", "shop", "outlet", "market", "retail", "distributors", "hlth", "mental", "ment", "mntl", "agency", "environment",
+        "borad", "environment", "investigation", "agency", "PHYSIO","foundation", "trust", "association", "organization", "network", "CNRS", "C.N.R.S", "state", "SCTD", "europe", "medcor",
+        "medi", "metro", "SOCIO", "METROPOLITANO", "County", "council", "foundation", "fondation", "trust", "union", "syndicate",
+        "board", "chamber", "association", "club", "society", "network", "cooperative", "federation", "council", "committee",
+        "coalition", "initiative", "team", "division", "branch", "unit", "project", "consortium", "alliance", "hub", "taskforce","company", "organization", "institution", "corporativo", "gesellschaft", "assurance", "bank", "insurance", "enterprise",
+        "commerce", "trade", "supply", "distribution", "networking", "technology", "innovation", "research", "development",
+        "healthcare", "medical", "dental", "pharmaceutical", "therapeutics", "optimal", "clinic", "hospitality", "services",
+        "consulting", "partners", "group", "holdings", "international", "global", "industries", "logistics", "trading",
+        "incubator", "accelerator","publishing","publisher","agency","MEDICINE","DENTISTRY","ACADEMIC","COMPANY","BOARD","FOUNDATION","CLEVELAND","CARDIOFRONT","univ","college","noirlab"
     ]
     keywords = sorted(set([k.lower() for k in keywords]), key=len, reverse=True)
 
