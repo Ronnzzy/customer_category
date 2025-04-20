@@ -50,8 +50,7 @@ non_individual_keywords = [
     "consulting", "partners", "group", "holdings", "international", "global", "industries", "logistics", "trading",
     # Add your missing keywords here as you find them
     # Example: 
-    "publishing","publisher","agency","MEDICINE","DENTISTRY","ACADEMIC","COMPANY","BOARD","FOUNDATION","CLEVELAND","CARDIOFRONT","univ","BOOLE","CCMAR","ABBVIE","ROD","BW-FAULKNER","MEMORIALCARE","APNIMED","CWSHIN"
-    "NOBLIS","CONDE","ESTRO"
+    "publishing","publisher","agency","MEDICINE","DENTISTRY","ACADEMIC","COMPANY","BOARD","FOUNDATION","CLEVELAND","CARDIOFRONT","univ",
 ]
 
 # Out-of-scope detection logic based on strict keyword matching
@@ -60,9 +59,9 @@ def classify_name(name):
         if not isinstance(name, str):
             return "Needs Review"
         name = name.strip().lower()
-        # Check for keyword match (no ignore for . or - when keyword is present)
+        # Check for keyword match (strict detection, no ignore for . or -)
         for keyword in non_individual_keywords:
-            pattern = rf'\b{re.escape(keyword)}\b(?=\s|$)'
+            pattern = rf'(?:\b|\.){re.escape(keyword)}(?:\b|\.)'
             if re.search(pattern, name, re.IGNORECASE):
                 return "Out of Scope"
         # Check for special characters (except . and -)
@@ -70,7 +69,7 @@ def classify_name(name):
         if special_chars.search(name):
             return "Needs Review"
         # If only . or - are present (e.g., Dr., Smith-Jones) and no keyword, mark as In Scope
-        if re.search(r'[.\-]', name) and not any(re.search(rf'\b{re.escape(keyword)}\b(?=\s|$)', name, re.IGNORECASE) for keyword in non_individual_keywords):
+        if re.search(r'[.\-]', name) and not any(re.search(rf'(?:\b|\.){re.escape(keyword)}(?:\b|\.)', name, re.IGNORECASE) for keyword in non_individual_keywords):
             return "In Scope"
         # Default to In Scope if no keyword or special chars (except . and -)
         return "In Scope"
