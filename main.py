@@ -6,8 +6,8 @@ st.set_page_config(page_title="Customer Scope Classifier", layout="wide")
 
 # Full keyword list for non-individual detection
 non_individual_keywords = sorted(list(set([
-    "ACHYUT", "ACADEMIC", "ACCELERATOR", "ACCOUNTS", "ADMIN", "ADMINISTRATION", "ADULT", "ADVISORY",
-    "ADVISORS", "AG", "AGENCY", "ALLIANCE", "APOTHECARY", "APS", "ASSOCIATES", "ASSOCIATION", "ASOCIACION",
+    "ACHYUT", "ACADEMIC", "ACCELERATOR", "ACCOUNTS", "ADMIN", "ADMINISTRATION", "ADULT", "ADVISORY","press",
+    "ADVISORS", "AG", "AGENCY", "ALLIANCE", "APOTHECARY", "APS", "ASSOCIATES", "ASSOCIATION", "ASOCIACION","SP","ZOO",
     "AS", "A/S", "BANK", "BIO-TECHNE", "BIOTECH", "BOARD", "BORAD", "BTP", "BUREAU", "BV", "CABINET",
     "CAPITAL", "CARDIO", "CARDIOFRONT", "CARE", "CENTER", "CENTRE", "CHAMBER", "CIF", "CIVIL", "CLEVELAND",
     "CLINIC", "CLUB", "CO", "CO.", "COALITION", "COLLEGE", "COLLEGES", "COMMERCE", "COMMITTEE", "COMM",
