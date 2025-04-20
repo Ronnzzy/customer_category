@@ -59,19 +59,19 @@ def classify_name(name):
         if not isinstance(name, str):
             return "Needs Review"
         name = name.strip().lower()
-        # Check for keyword match (strict detection, handle . and - properly)
+        # Logic 1 & 3: Check for keyword anywhere in the name (no boundary restriction)
         for keyword in non_individual_keywords:
-            pattern = rf'(?:\b|\.){re.escape(keyword)}(?:\b|\.)'
+            pattern = rf'{re.escape(keyword)}'
             if re.search(pattern, name, re.IGNORECASE):
                 return "Out of Scope"
-        # Check for special characters (except . and -)
+        # Logic 2: Check for special characters (except . and -)
         special_chars = re.compile(r'[^a-zA-Z0-9.\-]')
         if special_chars.search(name):
             return "Needs Review"
-        # If only . or - are present (e.g., Dr., Smith-Jones) and no keyword, mark as In Scope
-        if re.search(r'[.\-]', name) and not any(re.search(rf'(?:\b|\.){re.escape(keyword)}(?:\b|\.)', name, re.IGNORECASE) for keyword in non_individual_keywords):
+        # Logic 4: If only . or - are present (e.g., Dr., Mr., Ms.) and no keyword, mark as In Scope
+        if re.search(r'[.\-]', name) and not any(re.search(rf'{re.escape(keyword)}', name, re.IGNORECASE) for keyword in non_individual_keywords):
             return "In Scope"
-        # Default to In Scope if no keyword or special chars (except . and -)
+        # Logic 5: Default to In Scope for all other cases (e.g., Jane Smith, Charles Brown)
         return "In Scope"
     except Exception as e:
         st.error(f"Classification error for '{name}': {e}")
