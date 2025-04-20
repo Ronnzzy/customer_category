@@ -59,7 +59,7 @@ def classify_name(name):
         if not isinstance(name, str):
             return "Needs Review"
         name = name.strip().lower()
-        # Check for keyword match (strict detection, no ignore for . or -)
+        # Check for keyword match (strict detection, handle . and - properly)
         for keyword in non_individual_keywords:
             pattern = rf'(?:\b|\.){re.escape(keyword)}(?:\b|\.)'
             if re.search(pattern, name, re.IGNORECASE):
