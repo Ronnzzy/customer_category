@@ -19,14 +19,14 @@ if uploaded_file:
     # Keywords list (yours + extended, no removal)
     keywords = [
         "inc", "inc.", "llc", "l.l.c.", "ltd", "ltd.", "limited", "corp", "corporation", "co", "co.", "pte", "pvt", "llp",
-        "accounts", "payable", "university", "pharma", "clinic", "government", "foundation", "trust", "group", "bank",
+        "accounts", "payable", "university", "pharma", "clinic", "government", "foundation", "trust", "group", "bank","BIO-TECHNE"," INC."
         "hospital", "srl", "gmbh", "bhd", "s.a", "plc", "institute", "association", "organization", "network", "partners",
         "consulting", "company", "enterprise", "committee", "council", "ministry", "ngo", "dental", "medtech", "research",
         "govt", "logistics", "academy", "solutions", "holding", "services", "ventures", "industries", "labo", "univ",
-        "healthcare", "laboratory", "medical", "medicine", "commerce", "distribution", "development", "educational",
-        "international", "trading", "global", "insurance", "corporativo", "innovation", "technology", "r&d", "office",
+        "healthcare", "laboratory", "medical", "medicine", "commerce", "distribution", "development", "educational","MEDICINE"
+        "international", "trading", "global", "insurance", "corporativo", "innovation", "technology", "r&d", "office","PHARMACY","OSTEOPATHIC","COLLEGES"
         "admin", "metro", "sante", "hopital", "dispensary", "home", "cabinet", "gabinet", "therapeutics", "dott.", "sro",
-        "forest", "products", "board", "publishing", "publisher", "school", "denta", "asociacion", "ies", "torre", "vicens",
+        "forest", "products", "board", "publishing", "publisher", "school", "denta", "asociacion", "ies", "torre", "vicens","HEALTH","mental","FOUNDATION"
         "environment", "unlimited", "syndicate", "venture", "accelerator", "incubator", "cardio", "cardiofront",
         "cleveland", "physio","inc", "inc.", "llc", "l.l.c.", "ltd", "ltd.", "limited", "corp", "corporation", "co", "co.", "pte", "pvt", "llp", "home",
         "accounts", "payable", "price", "IPSB", "gmbh", "ag", "nv", "bv", "kk", "oy", "ab", "plc", "s.a", "s.a.s", "sa", "sarl", "sl",
