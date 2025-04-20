@@ -1,33 +1,20 @@
-import pandas as pd
-import re
 import streamlit as st
+import pandas as pd
+import io
 
-# Upload file
-uploaded_file = st.file_uploader("Upload Excel or CSV", type=["xlsx", "xls", "csv"])
-if uploaded_file:
-    if uploaded_file.name.endswith(".csv"):
-        df = pd.read_csv(uploaded_file)
-    else:
-        df = pd.read_excel(uploaded_file)
+st.set_page_config(page_title="Customer Scope Classifier", layout="wide")
 
-    st.write("### Preview of Uploaded Data")
-    st.dataframe(df.head())
-
-    # Input: name column to classify
-    name_column = st.selectbox("Select the column containing names", df.columns)
-
-    # Keywords list (yours + extended, no removal)
-    non_individual_keywords = sorted(list(set([
-        
+# Full keyword list for non-individual detection
+non_individual_keywords = sorted(list(set([
     "ACHYUT", "ACADEMIC", "ACCELERATOR", "ACCOUNTS", "ADMIN", "ADMINISTRATION", "ADULT", "ADVISORY",
     "ADVISORS", "AG", "AGENCY", "ALLIANCE", "APOTHECARY", "APS", "ASSOCIATES", "ASSOCIATION", "ASOCIACION",
     "AS", "A/S", "BANK", "BIO-TECHNE", "BIOTECH", "BOARD", "BORAD", "BTP", "BUREAU", "BV", "CABINET",
     "CAPITAL", "CARDIO", "CARDIOFRONT", "CARE", "CENTER", "CENTRE", "CHAMBER", "CIF", "CIVIL", "CLEVELAND",
     "CLINIC", "CLUB", "CO", "CO.", "COALITION", "COLLEGE", "COLLEGES", "COMMERCE", "COMMITTEE", "COMM",
-    "COMMUNITY", "COMPANY", "COMMERCE", "COMMITTEE", "CONSORTIUM", "CONSULATE", "CONSULTANTS", "CONSULTING",
-    "CONVENT", "CORP", "CORPORATION", "CORPORATIVO", "COUNSEL", "COUNCIL", "COUNTY", "CTR", "DENTA", "DENTAL",
-    "DENTISTRY", "DEPARTMENT", "DEPT", "DEVELOPMENT", "DISPENSARY", "DISTRIBUTION", "DISTRIBUTORS", "DITE",
-    "DIVISION", "DOS", "DOTT.", "DRUGSTORE", "E.R.L.", "EDU", "EDUCATION", "EDUCATIONAL", "EMBASSY", "ENTERPRISE",
+    "COMMUNITY", "COMPANY", "CONSORTIUM", "CONSULATE", "CONSULTANTS", "CONSULTING", "CONVENT", "CORP",
+    "CORPORATION", "CORPORATIVO", "COUNSEL", "COUNCIL", "COUNTY", "CTR", "DENTA", "DENTAL", "DENTISTRY",
+    "DEPARTMENT", "DEPT", "DEVELOPMENT", "DISPENSARY", "DISTRIBUTION", "DISTRIBUTORS", "DITE", "DIVISION",
+    "DOS", "DOTT.", "DRUGSTORE", "E.R.L.", "EDU", "EDUCATION", "EDUCATIONAL", "EMBASSY", "ENTERPRISE",
     "ENTERPRISES", "ENVIRONMENT", "EUROPE", "EURL", "FACULTY", "FEDERATION", "FINANCE", "FONDA", "FONDATION",
     "FOREST", "FOUNDATION", "FUND", "FUNDA", "GABINET", "GMBH", "GLOBAL", "GOVERNMENT", "GOVT", "GRAND", "GROUP",
     "HEALTH", "HEALTHCARE", "HLTH", "HOLDINGS", "HOME", "HOMEMED", "HOPITAL", "HOSPITAL", "HOSPITALITY", "IES",
@@ -43,38 +30,51 @@ if uploaded_file:
     "SCHOOL", "SDN", "SECRETARIAT", "SE", "SERVICES", "SHOP", "SITE", "SL", "SOCIO", "SOCIETY", "SOLUTIONS",
     "SRO", "STATE", "STORE", "SUPPLY", "SYNDICATE", "TASKFORCE", "TECH", "TECHNOLOGY", "TECNICAS", "TEAM",
     "THERAPEUTICS", "THERAPEUTIC", "TORRE", "TRADE", "TRADING", "TRAVAIL", "TRUST", "UNIV", "UNIVERSITY",
-    "UNLIMITED", "URBAN", "VALLEY", "VENTURE", "VENTURES", "VICENS", "UNIT", "UNION", "UNIT", "USA", "OFFICE",
-    "OPTIMAL", "SCTD", "SRL", "S.R.L", "SP ZOO", "STATE", "TEAM", "TECH", "TECHNOLOGY", "TORRE", "TRUST", 
-    "UNIV", "UNIVERSITY", "VENTURE", "VENTURES", "VICENS", "WORK", "IES TORRE VICEN", "ICO", "PHYSIO",
-    ])))
-    
-    keywords = sorted(set([k.lower() for k in keywords]), key=len, reverse=True)
+    "UNLIMITED", "URBAN", "VALLEY", "VENTURE", "VENTURES", "VICENS", "UNIT", "UNION", "USA", "WORK", "ICO"
+])))
 
-    titles = ["mr", "mr.", "ms", "ms.", "mrs", "mrs.", "dr", "dr."]
-
-    def classify_name(name):
-        name = str(name).lower()
-
-        if re.search(r"[^a-zA-Z0-9.\- ]", name):
-            return "Needs Review"
-
-        if any(re.search(rf"\b{k}\b", name) for k in keywords):
+# Function to classify names
+def classify_customer(name):
+    if pd.isna(name):
+        return "Out of Scope"
+    name_upper = str(name).upper()
+    for keyword in non_individual_keywords:
+        if keyword in name_upper:
             return "Out of Scope"
+    return "In Scope"
 
-        if any(name.startswith(t + " ") or f" {t} " in name for t in titles):
-            return "In Scope"
+# Streamlit UI
+st.title("📋 Customer Scope Classifier")
+st.markdown("Upload an Excel file to classify customer names as **In Scope** or **Out of Scope** based on business indicators.")
 
-        return "In Scope"
+uploaded_file = st.file_uploader("Upload Excel File", type=["xlsx"])
 
-    df["Classification"] = df[name_column].apply(classify_name)
+if uploaded_file:
+    try:
+        df = pd.read_excel(uploaded_file)
+        customer_col = st.selectbox("Select the Customer Name Column", df.columns)
 
-    st.write("### Classified Results")
-    st.dataframe(df)
+        # Classify
+        df["Scope Status"] = df[customer_col].apply(classify_customer)
 
-    # Download link
-    st.download_button(
-        label="Download Classified File",
-        data=df.to_csv(index=False),
-        file_name="classified_output.csv",
-        mime="text/csv"
-    )
+        # Show preview
+        st.success("Classification Complete ✅")
+        st.dataframe(df.head(20), use_container_width=True)
+
+        # Convert to Excel
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine='openpyxl') as writer:
+            df.to_excel(writer, index=False, sheet_name="Classified Data")
+        output.seek(0)
+
+        st.download_button(
+            label="📥 Download Processed File",
+            data=output,
+            file_name="classified_customers.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+
+    except Exception as e:
+        st.error(f"❌ Error: {e}")
+else:
+    st.info("👆 Upload an Excel file to begin.")
