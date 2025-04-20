@@ -17,7 +17,8 @@ if uploaded_file:
     name_column = st.selectbox("Select the column containing names", df.columns)
 
     # Keywords list (yours + extended, no removal)
-    non_individual_keywords = sorted(list(set([   
+    non_individual_keywords = sorted(list(set([
+        
     "ACHYUT", "ACADEMIC", "ACCELERATOR", "ACCOUNTS", "ADMIN", "ADMINISTRATION", "ADULT", "ADVISORY",
     "ADVISORS", "AG", "AGENCY", "ALLIANCE", "APOTHECARY", "APS", "ASSOCIATES", "ASSOCIATION", "ASOCIACION",
     "AS", "A/S", "BANK", "BIO-TECHNE", "BIOTECH", "BOARD", "BORAD", "BTP", "BUREAU", "BV", "CABINET",
@@ -45,7 +46,7 @@ if uploaded_file:
     "UNLIMITED", "URBAN", "VALLEY", "VENTURE", "VENTURES", "VICENS", "UNIT", "UNION", "UNIT", "USA", "OFFICE",
     "OPTIMAL", "SCTD", "SRL", "S.R.L", "SP ZOO", "STATE", "TEAM", "TECH", "TECHNOLOGY", "TORRE", "TRUST", 
     "UNIV", "UNIVERSITY", "VENTURE", "VENTURES", "VICENS", "WORK", "IES TORRE VICEN", "ICO", "PHYSIO",
-    ]
+    ])))
     keywords = sorted(set([k.lower() for k in keywords]), key=len, reverse=True)
 
     titles = ["mr", "mr.", "ms", "ms.", "mrs", "mrs.", "dr", "dr."]
