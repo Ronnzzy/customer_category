@@ -46,7 +46,6 @@ if uploaded_file:
     "UNLIMITED", "URBAN", "VALLEY", "VENTURE", "VENTURES", "VICENS", "UNIT", "UNION", "UNIT", "USA", "OFFICE",
     "OPTIMAL", "SCTD", "SRL", "S.R.L", "SP ZOO", "STATE", "TEAM", "TECH", "TECHNOLOGY", "TORRE", "TRUST", 
     "UNIV", "UNIVERSITY", "VENTURE", "VENTURES", "VICENS", "WORK", "IES TORRE VICEN", "ICO", "PHYSIO",
-])))
     ]
     keywords = sorted(set([k.lower() for k in keywords]), key=len, reverse=True)
 
