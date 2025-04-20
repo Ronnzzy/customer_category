@@ -47,6 +47,7 @@ if uploaded_file:
     "OPTIMAL", "SCTD", "SRL", "S.R.L", "SP ZOO", "STATE", "TEAM", "TECH", "TECHNOLOGY", "TORRE", "TRUST", 
     "UNIV", "UNIVERSITY", "VENTURE", "VENTURES", "VICENS", "WORK", "IES TORRE VICEN", "ICO", "PHYSIO",
     ])))
+    
     keywords = sorted(set([k.lower() for k in keywords]), key=len, reverse=True)
 
     titles = ["mr", "mr.", "ms", "ms.", "mrs", "mrs.", "dr", "dr."]
